@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class Warehouse {
 
     @Id
-    @Column
+    @Column(name = "warehouse_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 

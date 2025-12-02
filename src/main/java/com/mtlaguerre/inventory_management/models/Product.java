@@ -1,5 +1,7 @@
 package com.mtlaguerre.inventory_management.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,11 +16,11 @@ import jakarta.persistence.Table;
 public class Product {
 
     @Id                                                     // tells JPA this is our primary key
-    @Column                                                 // this is a database column
+    @Column(name = "prod_id")                               // this is a database column
     @GeneratedValue(strategy = GenerationType.IDENTITY)     // tells JPA this is an auto-increment field
     private long id;
 
-    @Column(name = "prod_num")                              // specifies that this corresponds to the "prod_num" column
+    @Column(name = "prod_rm")                              // specifies that this corresponds to the "prod_num" column
     private int rm;
 
     @Column(name = "prod_name")                             // specifies that this corresponds to the "prod_name" column
@@ -35,6 +37,7 @@ public class Product {
 
     @JoinColumn(name = "wh_id")                             // tells JPA that there is a relationship to this other model
     @ManyToOne                                              // tells JPA that this is the MANY side of the relationship
+    @JsonIgnore
     private Warehouse warehouse;
 
     public Product() {
