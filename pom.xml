@@ -38,6 +38,12 @@
 
 	<dependencies>
 
+		<!-- Needed for using Spring AOP -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
 		<!-- Spring Data JPA Dependency -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
