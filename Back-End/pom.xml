@@ -12,9 +12,9 @@
 
 	<groupId>com.mtlaguerre</groupId>
 	<artifactId>inventory-management</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<name>inventory-management</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Admin's inventory management tools</description>
 	<url/>
 
 	<licenses>
