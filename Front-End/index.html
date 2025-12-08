@@ -15,19 +15,140 @@
 	</head>
 
 	<body>
-		<!-- Header -->
-		<header>
-			<!-- Webpage Title -->
-			<h1>Inventory Management Tools</h1>
-		</header>
 
-		<!-- Content -->
-		<main></main>
+		<div class="layout">
+			
+			<!-- Menu -->
+			<nav class="sidebar">
+				<!-- Logo -->
+				<div class="logo-box">LOGO</div>
+				<ul class="nav">
+					<a href="./index.html">
+						<li>
+							<i></i>
+							Dashboard
+						</li>
+					</a>
+					
+					<a href="./warehouses">
+						<li>
+							<i></i>
+							Warehouses
+						</li>
+					</a>
+					
+					<a href="./products">
+						<li>
+							<i></i>
+							Products
+						</li>
+					</a>
+					
+					<a href="./transfers">
+						<li>
+							<i></i>
+							Transfers
+						</li>
+					</a>
+					
+					<a href="./users">
+						<li>
+							<i></i>
+							Users/Roles
+						</li>
+					</a>
+					
+					<a href="./reports">
+						<li>
+							<i></i>
+							Reports
+						</li>
+					</a>
+				</ul>
+			</nav>
+			
+			<!-- Main Content -->
+			<main class="content">
 
-		<!-- Footer -->
-		<footer></footer>
-	</body>
+				<header class="topbar">
+					<!-- Search Bar -->
+					<div class="search-box">
+						<i class="magnifying-glass"></i>
+						<input id="search-bar" type="text" placeholder="Search" name="searchBar"/>
+					</div>
+				</header>
+				
+				<h2 class="page-title">Dashboard</h2>
+				
+				<!-- Stat Cards -->
+				<section class="stats-cards">
+					<div class="stat-card">
+						<p>Total Products</p>
+						<h2>0</h2>
+					</div>
+					<div class="stat-card">
+						<p>Total Warehouses</p>
+						<h2>0</h2>
+					</div>
+					<div class="stat-card">
+						<p>Utilization %</p>
+						<h2>0%</h2>
+					</div>
+					<div class="stat-card">
+						<p>Low-Stock Items</p>
+						<h2>0</h2>
+					</div>
+				</section>
+				
+				<!-- Middle -->
+				<section class="middle-grid">
+					
+					<div class="stock-overview card">
+						<h3>Stock Overview</h3>
+						<div class="boxes">
+							<div class="big-box"></div>
+							<div class="small-boxes">
+								<div></div><div></div><div></div>
+								<div></div><div></div><div></div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="inventory-status card">
+						<h3>Inventory Status</h3>
+						
+						<div class="status-item">
+							<span>Warehouse 1</span>
+							<div class="bar"></div>
+						</div>
+						
+						<div class="status-item">
+							<span>Warehouse 2</span>
+							<div class="bar"></div>
+						</div>
+					</div>
+					
+				</section>
+				
+				<!-- Recent Activity -->
+				<section class="recent card">
+					<h3>Recent Activity</h3>
+					
+					<div class="line"></div>
+					<div class="line"></div>
+					<div class="line"></div>
+					
+					<div class="line short"></div>
+					<div class="line short"></div>
+				</section>
+			</main>
+			
+		</div>
 
+			<!-- Footer -->
+			<footer></footer>
+		</body>
+		
 	<!-- JavaScript reference -->
 	<script src="script.js"></script>
 </html>
