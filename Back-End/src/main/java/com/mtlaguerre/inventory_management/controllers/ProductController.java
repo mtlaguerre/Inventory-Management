@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +32,19 @@ public class ProductController {
             
             // return a 500 if any sort of exception occurs
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
+        }
+    }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<List<Product>> findProductByName(@PathVariable String name) {
+        List<Product> products = productService.findProductByName(name);
+
+        try {
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message", "Oops. Something went wrong.").build();
         }
     }
 }
