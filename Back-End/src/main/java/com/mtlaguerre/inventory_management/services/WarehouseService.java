@@ -66,6 +66,7 @@ public class WarehouseService {
 
     public void deleteWarehouse(long id) {
 
-        warehouseRepository.deleteById((int)id);
+        Warehouse warehouse = findById(id);
+        warehouseRepository.delete(warehouse);
     }
 }

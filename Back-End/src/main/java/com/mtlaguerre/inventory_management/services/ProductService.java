@@ -59,4 +59,10 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public void deleteProduct(long id) {
+
+        Product product = findProductById(id);
+        productRepository.delete(product);
+    }
+
 }

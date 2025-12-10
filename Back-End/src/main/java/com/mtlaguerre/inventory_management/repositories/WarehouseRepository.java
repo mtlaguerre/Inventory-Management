@@ -10,5 +10,5 @@ import com.mtlaguerre.inventory_management.models.Warehouse;
 @Repository
 public interface WarehouseRepository extends JpaRepository<Warehouse, Integer> {
     
-    Optional<Warehouse> findById(long id);
+    public Optional<Warehouse> findById(long id);
 }
