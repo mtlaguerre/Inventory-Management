@@ -17,7 +17,12 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    public Product createProduct(Product product) {
+        return productRepository.save(product);
+    }
+    
     public List<Product> findAllProducts() {
         return productRepository.findAll();
-    } 
+    }
+
 }
