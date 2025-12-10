@@ -1,6 +1,7 @@
 package com.mtlaguerre.inventory_management.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -51,8 +52,15 @@ public class ProductService {
         
     }
 
-    public Product findProductById(long id) {
-        return productRepository.findById(id);
+    public Product findProductById(long id) throws IllegalArgumentException {
+
+        Optional<Product> optProduct = productRepository.findById(id);
+
+        if (optProduct.isPresent()) {
+            return optProduct.get();
+        } else {
+            throw new IllegalArgumentException("Product doesn't exist");
+        }
     }
     
     public List<Product> findAllProducts() {
