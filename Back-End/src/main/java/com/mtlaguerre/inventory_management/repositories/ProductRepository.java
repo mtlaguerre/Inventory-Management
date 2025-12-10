@@ -18,4 +18,5 @@ import com.mtlaguerre.inventory_management.models.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
+    public Product findById(long id);
 }
