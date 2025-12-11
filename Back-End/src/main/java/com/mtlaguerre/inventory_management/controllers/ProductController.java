@@ -42,6 +42,12 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Product> findProductById(@PathVariable("id") long productId) {
+        Product product = productService.findProductById(productId);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
     // GET /products/product?name=
     @GetMapping("prod-name")
     public ResponseEntity<List<Product>> findProductByName(@RequestParam(name = "name", required = false) String productName) {
