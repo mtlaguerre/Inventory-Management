@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mtlaguerre.inventory_management.models.Warehouse;
@@ -54,6 +55,13 @@ public class WarehouseController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // returns 500 if anything else goes wrong
         }
+    }
+
+    // GET /warehouses/warehouse?name=
+    @GetMapping("warehouse")
+    public ResponseEntity<List<Warehouse>> findWarehouseByName(@RequestParam(name = "name", required = false) String warehouseName) {
+        List<Warehouse> warehouses = warehouseService.findWarehouseByName(warehouseName);
+        return new ResponseEntity<>(warehouses, HttpStatus.OK);
     }
     
     // POST /warehouses

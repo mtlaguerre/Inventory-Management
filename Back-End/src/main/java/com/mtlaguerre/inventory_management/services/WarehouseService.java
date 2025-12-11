@@ -69,4 +69,8 @@ public class WarehouseService {
         Warehouse warehouse = findById(id);
         warehouseRepository.delete(warehouse);
     }
+
+    public List<Warehouse> findWarehouseByName(String name) {
+        return warehouseRepository.findByName(name);
+    }
 }
