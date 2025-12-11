@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mtlaguerre.inventory_management.models.Product;
 import com.mtlaguerre.inventory_management.services.ProductService;
+
 
 @RestController
 @RequestMapping("/products")
@@ -38,6 +40,14 @@ public class ProductController {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
     }
+
+    // GET /products/product?name=
+    @GetMapping("product")
+    public ResponseEntity<List<Product>> findProductByName(@RequestParam(name = "name", required = false) String productName) {
+        List<Product> products = productService.findProductByName(productName);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+    
 
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
