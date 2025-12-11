@@ -100,17 +100,19 @@ public class ProductService {
         Product product = findProductById(pId);
 
         // if transfer would surpass warehouse max capacity
-        if (product.getCap() + warehouse.getCap() > warehouse.getMaxCap()) {
+        if (warehouse.getCap() + product.getCap() > warehouse.getMaxCap()) {
             throw new IllegalArgumentException("Not enough room to transfer product.");
         }
         else {
             // if product's warehouse ids are not equal (not same warehouse)
             if (product.getWarehouse().getId() != warehouse.getId()) {
                 Product updatedProduct = product;                           // copy product values
-                product.getWarehouse().setCap(product.getWarehouse().getCap() - product.getCap());                  // remove item capacity from current warehouse
+                updatedProduct.getWarehouse().setCap(product.getWarehouse().getCap() - product.getCap());           // remove item capacity from current warehouse
                 updatedProduct.setWarehouse(warehouse);                     // update product's warehouse location
-                updatedProduct =  updateProduct(product.getId(), updatedProduct);      // confirm changes
-                updatedProduct.getWarehouse().setCap(updatedProduct.getWarehouse().getCap() + product.getCap());    // add item capacity to destination warehouse
+                updatedProduct = updateProduct(product.getId(), updatedProduct);      // confirm changes
+                
+                // add item capacity to destination warehouse AFTER successfully updated changes
+                updatedProduct.getWarehouse().setCap(updatedProduct.getWarehouse().getCap() + product.getCap());
 
                 return updatedProduct;
             }
