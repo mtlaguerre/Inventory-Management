@@ -19,14 +19,15 @@ public class ProductService {
     }
 
     public Product createProduct(Product product) {
-        return productRepository.save(product);
+        return productRepository.save(product);         // add product to database
     }
 
     public Product updateProduct(long id, Product product) {
 
-        Product oldProduct = findProductById(id);
-        Product updatedProduct = oldProduct;
+        Product oldProduct = findProductById(id);   // find current product values
+        Product updatedProduct = oldProduct;        // create a copy of current product
 
+        // if data isn't null & old value != new value, then update to new value
         if (updatedProduct != null && product.getRm() != (updatedProduct.getRm())) {
             updatedProduct.setRm(product.getRm());
         }
@@ -46,19 +47,21 @@ public class ProductService {
             updatedProduct.setWarehouse(product.getWarehouse());
         }
 
-        productRepository.save(updatedProduct);
+        productRepository.save(updatedProduct);     // overwrite ware current product with the updated values
 
-        return updatedProduct;
+        return updatedProduct;      // return product with changes
         
     }
 
     public Product findProductById(long id) throws IllegalArgumentException {
 
-        Optional<Product> optProduct = productRepository.findById(id);
+        Optional<Product> optProduct = productRepository.findById(id);      // try finding product with id
 
+        // if product found
         if (optProduct.isPresent()) {
-            return optProduct.get();
+            return optProduct.get();    // return found product
         } else {
+            // handle product not found
             throw new IllegalArgumentException("Product doesn't exist");
         }
     }
@@ -69,12 +72,16 @@ public class ProductService {
 
     public void deleteProduct(long id) {
 
-        Product product = findProductById(id);
-        productRepository.delete(product);
+        Product product = findProductById(id);      // try finding product with id
+        productRepository.delete(product);          // remove product from database
     }
 
     public List<Product> findProductByName(String name) {
         return productRepository.findByName(name);
+    }
+
+    public List<Product> findProductByRm(int rm) {
+        return productRepository.findByRm(rm);
     }
 
 }

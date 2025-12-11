@@ -63,6 +63,7 @@ public class WarehouseController {
         List<Warehouse> warehouses = warehouseService.findWarehouseByName(warehouseName);
         return new ResponseEntity<>(warehouses, HttpStatus.OK);
     }
+
     
     // POST /warehouses
     @PostMapping

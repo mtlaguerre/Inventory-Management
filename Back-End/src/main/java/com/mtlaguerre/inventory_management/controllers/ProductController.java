@@ -28,6 +28,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+    // GET /products
     @GetMapping
     public ResponseEntity<List<Product>> findAllProducts() {
         List<Product> products = productService.findAllProducts();
@@ -42,19 +43,27 @@ public class ProductController {
     }
 
     // GET /products/product?name=
-    @GetMapping("product")
+    @GetMapping("prod-name")
     public ResponseEntity<List<Product>> findProductByName(@RequestParam(name = "name", required = false) String productName) {
         List<Product> products = productService.findProductByName(productName);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
-    
 
+    // GET /products/product?rm=
+    @GetMapping("prod-rm")
+    public ResponseEntity<List<Product>> findProductByRm(@RequestParam(name = "rm", required = false) int productRm) {
+        List<Product> products = productService.findProductByRm(productRm);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+    
+    // POST products
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
         
         return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
     }
 
+    // PUT /products/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable("id") long productId, @RequestBody Product product) {
 
@@ -62,6 +71,7 @@ public class ProductController {
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
+    // DELETE /products/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable("id") long productId) {
 
