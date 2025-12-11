@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mtlaguerre.inventory_management.models.Product;
+import com.mtlaguerre.inventory_management.models.Warehouse;
 import com.mtlaguerre.inventory_management.services.ProductService;
 
 
@@ -82,6 +83,22 @@ public class ProductController {
 
         Product updatedProduct = productService.updateProduct(productId, product);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+    }
+
+    // PUT /products/transfer/{id}
+    @PutMapping("/transfer/{id}")
+    public ResponseEntity<Product> transferProductToWarehouse(@PathVariable("id") long productId, @RequestBody Warehouse warehouse) {
+
+        
+        try {
+            Product product = productService.transferProductToWarehouse(productId, warehouse);
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        }
+        catch (Exception e) {
+            return ResponseEntity.internalServerError().header("mesage", e.getMessage()).build(); 
+        }
     }
 
     // DELETE /products/{id}

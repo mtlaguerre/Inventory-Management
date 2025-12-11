@@ -38,19 +38,19 @@ public class Warehouse {
     public Warehouse() {
     }
 
-    public Warehouse(String name, String location, float cap, float maxCap, List<Product> products) {
+    public Warehouse(String name, String location, float maxCap, List<Product> products) {
         this.name = name;
         this.location = location;
-        this.cap = cap;
+        this.cap = 0;
         this.maxCap = maxCap;
         this.products = products;
     }
 
-    public Warehouse(long id, String name, String location, float cap, float maxCap, List<Product> products) {
+    public Warehouse(long id, String name, String location, float maxCap, List<Product> products) {
         this.id = id;
         this.name = name;
         this.location = location;
-        this.cap = cap;
+        this.cap = 0;
         this.maxCap = maxCap;
         this.products = products;
     }
@@ -80,6 +80,13 @@ public class Warehouse {
     }
 
     public float getCap() {
+        // dynamically set return capacity by products list
+        if (!products.isEmpty()) {
+            for (Product product : products) {
+                cap += product.getCap();
+            }
+        }
+        
         return cap;
     }
 

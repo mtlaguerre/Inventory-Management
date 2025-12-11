@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.mtlaguerre.inventory_management.models.Product;
+import com.mtlaguerre.inventory_management.models.Warehouse;
 import com.mtlaguerre.inventory_management.repositories.ProductRepository;
 
 @Service
@@ -86,6 +87,37 @@ public class ProductService {
 
     public List<Product> findProductByDescription(String description) {
         return productRepository.findByDescriptionContaining(description);
+    }
+
+    public Product transferProductToWarehouse(long pId, Warehouse warehouse) throws IllegalArgumentException {
+
+        /**
+         * NOTES:
+         *      Required Functionality
+         *          consider warehouse capacities during transfers
+         */
+
+        Product product = findProductById(pId);
+
+        // if transfer would surpass warehouse max capacity
+        if (product.getCap() + warehouse.getCap() > warehouse.getMaxCap()) {
+            throw new IllegalArgumentException("Not enough room to transfer product.");
+        }
+        else {
+            // if product's warehouse ids are not equal (not same warehouse)
+            if (product.getWarehouse().getId() != warehouse.getId()) {
+                Product updatedProduct = product;                           // copy product values
+                product.getWarehouse().setCap(product.getWarehouse().getCap() - product.getCap());                  // remove item capacity from current warehouse
+                updatedProduct.setWarehouse(warehouse);                     // update product's warehouse location
+                updatedProduct =  updateProduct(product.getId(), updatedProduct);      // confirm changes
+                updatedProduct.getWarehouse().setCap(updatedProduct.getWarehouse().getCap() + product.getCap());    // add item capacity to destination warehouse
+
+                return updatedProduct;
+            }
+            else {
+                throw new IllegalArgumentException("Warehouse destination equals current warehouse.");
+            }
+        }
     }
 
 }

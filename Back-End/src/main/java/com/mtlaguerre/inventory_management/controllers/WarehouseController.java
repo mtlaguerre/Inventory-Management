@@ -51,7 +51,7 @@ public class WarehouseController {
             Warehouse warehouse = warehouseService.findById(warehouseId);
             return new ResponseEntity<>(warehouse, HttpStatus.OK);       // returns 200 if everything succeeds
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);            // returns 400 if id doesn't exist
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();            // returns 400 if id doesn't exist
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // returns 500 if anything else goes wrong
         }
