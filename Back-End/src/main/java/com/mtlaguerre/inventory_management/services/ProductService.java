@@ -84,4 +84,8 @@ public class ProductService {
         return productRepository.findByRm(rm);
     }
 
+    public List<Product> findProductByDescription(String description) {
+        return productRepository.findByDescriptionContaining(description);
+    }
+
 }

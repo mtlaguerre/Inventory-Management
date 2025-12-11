@@ -61,6 +61,13 @@ public class ProductController {
         List<Product> products = productService.findProductByRm(productRm);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
+    // GET /products/prod-desc?desc=
+    @GetMapping("prod-desc")
+    public ResponseEntity<List<Product>> findProductByDescription(@RequestParam(name = "desc", required = false) String productDescription) {
+        List<Product> products = productService.findProductByDescription(productDescription);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
     
     // POST products
     @PostMapping
