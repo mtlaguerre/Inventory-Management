@@ -42,6 +42,43 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+document.getElementById('new-product-form').addEventListener('submit', (event) => {
+
+    // event object gives info about the event we are listening for
+    event.preventDefault();             // preventDefault() is going to prevent the form from refreshing the page
+
+    // FormData takes in the html tags for your form
+    let inputData = new FormData(document.getElementById('new-product-form'));
+
+    let newProduct = {
+        // use .get() to retrieve a field from from data and pass in the NAME attribute from the <input> tag
+        rm : inputData.get("new-product-rm"),
+        warehouse : inputData.get("new-warehouse"),
+        capacity : inputData.get("new-product-capacity")
+        
+    }
+
+    doPostRequest(newProduct);
+});
+
+async function doPostRequest(newProduct) {
+
+    let returnedData = await fetch(productsApiUrl, {
+        method : 'POST',
+        headers : {
+            "Content-Type" : 'application/json'     // make sure your server is expecting to receive JSON in the body
+        },
+        body : JSON.stringify(newProduct)           // turns a js object into JSON
+    });
+
+    // .json() to deserialize the JSON back into js object - this ALSO returns a promise
+    let productJson = await returnedData.json();
+
+    // just need to add product to table
+    addProductToTable(productJson);
+}
+
+
 
 function addProductToTable(newProduct) {
 
@@ -54,9 +91,9 @@ function addProductToTable(newProduct) {
     let editBtn = document.createElement('td');      // will create a <td> tag
     let deleteBtn = document.createElement('td');      // will create a <td> tag
 
-    rm.innerText = newProduct.id;
+    rm.innerText = newProduct.rm.rm;
     capacity.innerText = newProduct.capacity;
-    warehouse.innerText = newProduct.warehouse;
+    warehouse.innerText = newProduct.warehouse.warehouseName.name;
 
     editBtn.innerHTML = 
     `<button class="btn btn-primary" id="edit-button" onclick="activateEditForm(${newProduct.id})">Edit</button>`
