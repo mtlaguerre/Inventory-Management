@@ -81,17 +81,4 @@ public class ProductController {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // otherwise return 500
         }
     }
-
-    @GetMapping("/{name}")
-    public ResponseEntity<List<Product>> findProductByName(@PathVariable String name) {
-        List<Product> products = productService.findProductByName(name);
-
-        try {
-            return new ResponseEntity<>(products, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().header("message", "Oops. Something went wrong.").build();
-        }
-    }
 }
