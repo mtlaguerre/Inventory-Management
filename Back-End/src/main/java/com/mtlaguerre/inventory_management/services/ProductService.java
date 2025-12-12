@@ -22,18 +22,6 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-<<<<<<< HEAD
-    public List<Product> findProductByName(String name) throws IllegalArgumentException {
-        Optional<List<Product>> products =  productRepository.findByName(name);
-
-        if (products.isPresent()) {
-            return products.get();      // returns object from the optional
-        }
-        else {
-            throw new IllegalArgumentException("No product with that name.");
-        }
-    }
-=======
     public Product addProduct(Product product) throws IllegalArgumentException {
 
         // handle unset rm
@@ -95,5 +83,4 @@ public class ProductService {
 
         productRepository.delete(product);
     }
->>>>>>> feature-inventory-management
 }
