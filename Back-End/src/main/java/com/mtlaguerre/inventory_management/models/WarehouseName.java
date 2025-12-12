@@ -129,6 +129,6 @@ public class WarehouseName {
     @Override
     public String toString() {
         return "WarehouseName [id=" + id + ", name=" + name + ", warehouseLocation=" + warehouseLocation
-                + ", warehouses=" + warehouses + "]";
+                 + "]";
     }
 }
