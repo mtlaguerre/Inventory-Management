@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,7 +62,19 @@ public class WarehouseController {
             warehouseService.updateWarehouse(warehouseId, warehouse);
             return new ResponseEntity<>(HttpStatus.OK);                                             // return 200 if successfully updated warehouse
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().header("message", e.getMessage()).build();           // return 400 if input is invalid, message
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();           // return 400 if input is invalid, with message
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // otherwise return 500
+        }
+    }
+
+    // DELETE /warehouses/id/{id}
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<Warehouse> deleteWarehouse(@PathVariable("id") long warehouseId) {
+        
+        try {
+            warehouseService.deleteWarehouse(warehouseId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);                                     // return 204 if successfully deleted warehouse
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // otherwise return 500
         }

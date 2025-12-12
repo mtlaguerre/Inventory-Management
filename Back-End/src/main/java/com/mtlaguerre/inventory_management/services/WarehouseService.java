@@ -77,6 +77,11 @@ public class WarehouseService {
         updatedWarehouse = warehouseRepository.save(updatedWarehouse);
 
         return updatedWarehouse;
+    }
 
+    public void deleteWarehouse(long warehouseId) {
+        Warehouse warehouse = findWarehouseById(warehouseId);
+        
+        warehouseRepository.delete(warehouse);
     }
 }
