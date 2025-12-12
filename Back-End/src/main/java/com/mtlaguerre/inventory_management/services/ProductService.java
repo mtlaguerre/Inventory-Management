@@ -66,13 +66,13 @@ public class ProductService {
         }
 
         // handle changed capacity
-        if (product.getCapacity() != oldProduct.getCapacity()) {
+        if (product.getCapacity() > 0 && product.getCapacity() != oldProduct.getCapacity()) {
             updatedProduct.setCapacity(product.getCapacity());
         }
 
         // handle changed warehouse
         if (product.getWarehouse() != null && product.getWarehouse() != oldProduct.getWarehouse()) {
-            updatedProduct.setWarehouse(product.getWarehouse());
+            updatedProduct.setWarehouse(product.getWarehouse());                    // update warehouse
         }
 
         return productRepository.save(updatedProduct);     // confirm changes
