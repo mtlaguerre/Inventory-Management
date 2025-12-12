@@ -13,6 +13,6 @@ import com.mtlaguerre.inventory_management.models.Product;
  *          only method declarations, no method bodies since its an interface
  */
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
 }
