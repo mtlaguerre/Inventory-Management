@@ -29,6 +29,9 @@ public class Product {
     @JoinColumn(name = "products_wh")               // tells jpa that there is a relationship to this other model
     private Warehouse warehouse;
 
+    public Product() {
+    }
+
     public Product(long id, ProductRm productRm, int capacity, Warehouse warehouse) {
         this.id = id;
         this.productRm = productRm;

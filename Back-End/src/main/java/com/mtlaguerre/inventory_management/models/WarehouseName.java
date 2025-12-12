@@ -2,6 +2,8 @@ package com.mtlaguerre.inventory_management.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +31,15 @@ public class WarehouseName {
     private WarehouseLocation warehouseLocation;
 
     @OneToMany(targetEntity = Warehouse.class, mappedBy = "warehouseName")
+    @JsonIgnore
     private List<Warehouse> warehouses;
+
+    public WarehouseName() {
+    }
+
+    public WarehouseName(long id) {
+        this.id = id;
+    }
 
     public WarehouseName(long id, String name, WarehouseLocation warehouseLocation, List<Warehouse> warehouses) {
         this.id = id;

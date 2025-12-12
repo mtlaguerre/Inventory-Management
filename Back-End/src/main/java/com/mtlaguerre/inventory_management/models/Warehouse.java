@@ -2,6 +2,8 @@ package com.mtlaguerre.inventory_management.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +19,7 @@ import jakarta.persistence.Table;
 public class Warehouse {
 
     @Id                                                     // tells jpa this is our primary key
-    @Column(name = "products_id")                           // this is a database column        "name = " specifies this corresponds to the "products_id" column
+    @Column(name = "warehouses_id")                           // this is a database column        "name = " specifies this corresponds to the "products_id" column
     @GeneratedValue(strategy = GenerationType.IDENTITY)     // tells jpa this is an auto-increment field
     private long id;
 
@@ -31,21 +33,26 @@ public class Warehouse {
     // NO column annotation... because it isn't a column in our table
     // Warehouse is the ONE side of the relationship, mappedBy is the name of the JAVA PROPERTY in the other class
     @OneToMany(targetEntity = Product.class, mappedBy = "warehouse")
+    @JsonIgnore                         // will ignore this property when serializing into JSON
     private List<Product> products;
 
     public Warehouse() {
     }
 
-    public Warehouse(long id, WarehouseName warehouseName, int capacity, List<Product> products) {
+    public Warehouse(long id) {
+        this.id = id;
+    }
+
+    public Warehouse(long id, WarehouseName warehouseName, List<Product> products) {
         this.id = id;
         this.warehouseName = warehouseName;
-        this.capacity = capacity;
+        this.capacity = 0;
         this.products = products;
     }
 
-    public Warehouse(WarehouseName warehouseName, int capacity, List<Product> products) {
+    public Warehouse(WarehouseName warehouseName, List<Product> products) {
         this.warehouseName = warehouseName;
-        this.capacity = capacity;
+        this.capacity = 0;
         this.products = products;
     }
 
@@ -66,6 +73,16 @@ public class Warehouse {
     }
 
     public int getCapacity() {
+
+        // dynamically find capacity using product list
+        if (!products.isEmpty()) {
+            // loop through products
+            for (Product product : products) {
+                // add to current product capacity to warehouse capacity
+                capacity += product.getCapacity();
+            }
+        }
+        
         return capacity;
     }
 

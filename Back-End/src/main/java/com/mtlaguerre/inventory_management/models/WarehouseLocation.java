@@ -2,6 +2,8 @@ package com.mtlaguerre.inventory_management.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +28,11 @@ public class WarehouseLocation {
     private int maxCapacity;
 
     @OneToMany(targetEntity = WarehouseName.class, mappedBy = "warehouseLocation")
+    @JsonIgnore
     private List<WarehouseName> warehouseNames;
+
+    public WarehouseLocation() {
+    }
 
     public WarehouseLocation(long id, String location, int maxCapacity, List<WarehouseName> warehouseNames) {
         this.id = id;
@@ -71,6 +77,43 @@ public class WarehouseLocation {
 
     public void setWarehouseNames(List<WarehouseName> warehouseNames) {
         this.warehouseNames = warehouseNames;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (id ^ (id >>> 32));
+        result = prime * result + ((location == null) ? 0 : location.hashCode());
+        result = prime * result + maxCapacity;
+        result = prime * result + ((warehouseNames == null) ? 0 : warehouseNames.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        WarehouseLocation other = (WarehouseLocation) obj;
+        if (id != other.id)
+            return false;
+        if (location == null) {
+            if (other.location != null)
+                return false;
+        } else if (!location.equals(other.location))
+            return false;
+        if (maxCapacity != other.maxCapacity)
+            return false;
+        if (warehouseNames == null) {
+            if (other.warehouseNames != null)
+                return false;
+        } else if (!warehouseNames.equals(other.warehouseNames))
+            return false;
+        return true;
     }
 
     @Override

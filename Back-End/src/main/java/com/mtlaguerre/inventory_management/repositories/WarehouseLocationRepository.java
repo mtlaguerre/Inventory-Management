@@ -3,6 +3,6 @@ package com.mtlaguerre.inventory_management.repositories;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WarehouseRepository {
+public interface WarehouseLocationRepository {
 
 }
