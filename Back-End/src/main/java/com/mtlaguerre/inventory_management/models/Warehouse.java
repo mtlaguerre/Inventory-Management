@@ -7,30 +7,28 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-@Entity
-@Table(name = "warehouses")
+@Entity                             // tells Spring JPA this is a database table AND A BEAN
+@Table(name = "warehouses")           // only needed if your db table is a different name than your class
 public class Warehouse {
 
-    @Id
-    @Column(name = "warehouse_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id                                                     // tells jpa this is our primary key
+    @Column(name = "products_id")                           // this is a database column        "name = " specifies this corresponds to the "products_id" column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)     // tells jpa this is an auto-increment field
     private long id;
 
-    @Column(name = "warehouse_name")
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "warehouses_name_id")
+    private WarehouseName warehouseName;
 
-    @Column(name = "warehouse_location")
-    private String location;
+    @Column(name = "warehouses_capacity")
+    private int capacity;
 
-    @Column(name = "warehouse_capacity")
-    private float cap;
-
-    @Column(name = "warehouse_max_capacity")
-    private float maxCap;
-
+    // NO column annotation... because it isn't a column in our table
     // Warehouse is the ONE side of the relationship, mappedBy is the name of the JAVA PROPERTY in the other class
     @OneToMany(targetEntity = Product.class, mappedBy = "warehouse")
     private List<Product> products;
@@ -38,20 +36,16 @@ public class Warehouse {
     public Warehouse() {
     }
 
-    public Warehouse(String name, String location, float maxCap, List<Product> products) {
-        this.name = name;
-        this.location = location;
-        this.cap = 0;
-        this.maxCap = maxCap;
+    public Warehouse(long id, WarehouseName warehouseName, int capacity, List<Product> products) {
+        this.id = id;
+        this.warehouseName = warehouseName;
+        this.capacity = capacity;
         this.products = products;
     }
 
-    public Warehouse(long id, String name, String location, float maxCap, List<Product> products) {
-        this.id = id;
-        this.name = name;
-        this.location = location;
-        this.cap = 0;
-        this.maxCap = maxCap;
+    public Warehouse(WarehouseName warehouseName, int capacity, List<Product> products) {
+        this.warehouseName = warehouseName;
+        this.capacity = capacity;
         this.products = products;
     }
 
@@ -63,43 +57,20 @@ public class Warehouse {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public WarehouseName getWarehouseName() {
+        return warehouseName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setWarehouseName(WarehouseName warehouseName) {
+        this.warehouseName = warehouseName;
     }
 
-    public String getLocation() {
-        return location;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public float getCap() {
-        // dynamically set return capacity by products list
-        if (!products.isEmpty()) {
-            for (Product product : products) {
-                cap += product.getCap();
-            }
-        }
-        
-        return cap;
-    }
-
-    public void setCap(float cap) {
-        this.cap = cap;
-    }
-
-    public float getMaxCap() {
-        return maxCap;
-    }
-
-    public void setMaxCap(float maxCap) {
-        this.maxCap = maxCap;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public List<Product> getProducts() {
@@ -115,10 +86,8 @@ public class Warehouse {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (id ^ (id >>> 32));
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((location == null) ? 0 : location.hashCode());
-        result = prime * result + Float.floatToIntBits(cap);
-        result = prime * result + Float.floatToIntBits(maxCap);
+        result = prime * result + ((warehouseName == null) ? 0 : warehouseName.hashCode());
+        result = prime * result + capacity;
         result = prime * result + ((products == null) ? 0 : products.hashCode());
         return result;
     }
@@ -134,19 +103,12 @@ public class Warehouse {
         Warehouse other = (Warehouse) obj;
         if (id != other.id)
             return false;
-        if (name == null) {
-            if (other.name != null)
+        if (warehouseName == null) {
+            if (other.warehouseName != null)
                 return false;
-        } else if (!name.equals(other.name))
+        } else if (!warehouseName.equals(other.warehouseName))
             return false;
-        if (location == null) {
-            if (other.location != null)
-                return false;
-        } else if (!location.equals(other.location))
-            return false;
-        if (Float.floatToIntBits(cap) != Float.floatToIntBits(other.cap))
-            return false;
-        if (Float.floatToIntBits(maxCap) != Float.floatToIntBits(other.maxCap))
+        if (capacity != other.capacity)
             return false;
         if (products == null) {
             if (other.products != null)
@@ -158,7 +120,8 @@ public class Warehouse {
 
     @Override
     public String toString() {
-        return "Warehouse [id=" + id + ", name=" + name + ", location=" + location + ", cap=" + cap + ", maxCap="
-                + maxCap + ", products=" + products + "]";
+        return "Warehouse [id=" + id + ", warehouseName=" + warehouseName + ", capacity=" + capacity + "]";
     }
+
+    
 }
