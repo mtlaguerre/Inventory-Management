@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,6 +61,20 @@ public class ProductController {
         try {
             productService.updateProduct(productId, product);
             return new ResponseEntity<>(HttpStatus.OK);                                             // return 200 if successfully updated product
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();           // return 400 if input is invalid, with message
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // otherwise return 500
+        }
+    }
+
+    // DELETE /products/id/{id}
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable("id") long productId) {
+
+        try {
+            productService.deleteProduct(productId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);                                     // return 204 if successfully updated product
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().header("message", e.getMessage()).build();           // return 400 if input is invalid, with message
         } catch (Exception e) {

@@ -77,4 +77,10 @@ public class ProductService {
 
         return productRepository.save(updatedProduct);     // confirm changes
     }
+
+    public void deleteProduct(long productId) {
+        Product product = findProductById(productId);
+
+        productRepository.delete(product);
+    }
 }
