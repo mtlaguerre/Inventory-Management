@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
 public class Warehouse {
 
     @Id                                                     // tells jpa this is our primary key
-    @Column(name = "warehouses_id")                           // this is a database column        "name = " specifies this corresponds to the "products_id" column
+    @Column(name = "warehouses_id")                         // this is a database column        "name = " specifies this corresponds to the "products_id" column
     @GeneratedValue(strategy = GenerationType.IDENTITY)     // tells jpa this is an auto-increment field
     private long id;
 
@@ -43,17 +43,17 @@ public class Warehouse {
         this.id = id;
     }
 
-    public Warehouse(long id, WarehouseName warehouseName, List<Product> products) {
+    public Warehouse(long id, WarehouseName warehouseName) {
         this.id = id;
         this.warehouseName = warehouseName;
         this.capacity = 0;
-        this.products = products;
+        this.products = null;
     }
 
-    public Warehouse(WarehouseName warehouseName, List<Product> products) {
+    public Warehouse(WarehouseName warehouseName) {
         this.warehouseName = warehouseName;
         this.capacity = 0;
-        this.products = products;
+        this.products = null;
     }
 
     public long getId() {
@@ -75,7 +75,7 @@ public class Warehouse {
     public int getCapacity() {
 
         // dynamically find capacity using product list
-        if (!products.isEmpty()) {
+        if (products != null) {
             // loop through products
             for (Product product : products) {
                 // add to current product capacity to warehouse capacity

@@ -43,7 +43,7 @@ public class ProductController {
 
         try {
             productService.addProduct(product);
-            return new ResponseEntity<>(HttpStatus.CREATED);        // return 204 if successfully added product
+            return new ResponseEntity<>(HttpStatus.CREATED);        // return 201 if successfully added product
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().header("message", e.getMessage()).build();   // return 400 if invalid request and display custom message
         } catch (Exception e) {
