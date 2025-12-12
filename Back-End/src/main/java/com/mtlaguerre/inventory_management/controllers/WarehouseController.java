@@ -17,13 +17,13 @@ import com.mtlaguerre.inventory_management.models.Warehouse;
 import com.mtlaguerre.inventory_management.services.WarehouseService;
 
 
-
 @RestController
 @RequestMapping("/warehouses")
 public class WarehouseController {
 
     private final WarehouseService warehouseService;
 
+    // constructor injection
     public WarehouseController(WarehouseService warehouseService) {
         this.warehouseService = warehouseService;
     }
@@ -31,68 +31,54 @@ public class WarehouseController {
     // GET /warehouses
     @GetMapping
     public ResponseEntity<List<Warehouse>> findAllWarehouses() {
-        List<Warehouse> warehouses = warehouseService.findAllWarehouses();
-
-        try {
-            return new ResponseEntity<>(warehouses, HttpStatus.OK);       // return products and 200 if everything succeeds
-        } catch (Exception e) {
-            
-            // return a 500 if any sort of exception occurs
-            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
-        }
-    }
-
-    // GET /warehouses/{id}
-    @GetMapping("/{id}")
-    public ResponseEntity<Warehouse> findWarehouseById(@PathVariable("id") long warehouseId) {
-
-        try {
-            Warehouse warehouse = warehouseService.findById(warehouseId);
-            return new ResponseEntity<>(warehouse, HttpStatus.OK);       // returns 200 if everything succeeds
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);            // returns 400 if id doesn't exist
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // returns 500 if anything else goes wrong
-        }
-    }
-    
-    // POST /warehouses
-    @PostMapping
-    public ResponseEntity<Warehouse> addNewWarehouse(@RequestBody Warehouse warehouse) {
-
-        try {
-            return new ResponseEntity<>(warehouseService.createWarehouse(warehouse), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
-        }
-    }
-    
-    // PUT /warehouses/{id}
-    @PutMapping("/{id}")
-    public ResponseEntity<Warehouse> updateWarehouse(@PathVariable("id") long warehouseId, @RequestBody Warehouse warehouse) {
         
         try {
-            Warehouse updatedWarehouse = warehouseService.updateWarehouse(warehouseId, warehouse);
-            return new ResponseEntity<>(updatedWarehouse, HttpStatus.OK);       // returns 200 if everything succeeds
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);            // returns 400 if id doesn't exist
+            List<Warehouse> warehouses = warehouseService.findAllWarehouses();
+            return new ResponseEntity<>(warehouses, HttpStatus.OK);                                 // return 200 if successful
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // returns 500 if anything else goes wrong
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // otherwise return 500
         }
     }
 
-    // DELETE /warehouses/{id}
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Warehouse> deleteWarehouse(@PathVariable("id") long warehouseId) {
+    // POST /warehouses
+    @PostMapping
+    public ResponseEntity<Warehouse> addWarehouse(@RequestBody Warehouse warehouse) {
+        
+        try {
+            warehouseService.addWarehouse(warehouse);
+            return new ResponseEntity<>(HttpStatus.CREATED);                                        // return 201 if successfully created warehouse
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();           // return 400 if input is invalid, with message
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // otherwise return 500
+        }
+    }
+
+    // PUT /warehouses/id/{id}
+    @PutMapping("/id/{id}")
+    public ResponseEntity<Warehouse> updateWarehouse(@PathVariable("id") long warehouseId, @RequestBody Warehouse warehouse) {
 
         try {
-            warehouseService.deleteWarehouse(warehouseId);
-            return new ResponseEntity<>(HttpStatus.OK);
+            warehouseService.updateWarehouse(warehouseId, warehouse);
+            return new ResponseEntity<>(HttpStatus.OK);                                             // return 200 if successfully updated warehouse
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();           // return 400 if input is invalid, with message
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().header("mesage", e.getMessage()).build();
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // otherwise return 500
+        }
+    }
+
+    // DELETE /warehouses/id/{id}
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<Warehouse> deleteWarehouse(@PathVariable("id") long warehouseId) {
+        
+        try {
+            warehouseService.deleteWarehouse(warehouseId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);                                     // return 204 if successfully deleted warehouse
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // otherwise return 500
         }
     }
     
+
 }

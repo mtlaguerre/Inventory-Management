@@ -14,12 +14,9 @@ import com.mtlaguerre.inventory_management.models.Product;
  *      talk to your database (executes queries)
  *      no business logic
  *          only method declarations, no method bodies since its an interface
- * 
- *      JpaRepository needs two data types: one for the model and another for the PK of that model
- * 
  */
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
     public Optional<List<Product>> findByName(String name);
 }

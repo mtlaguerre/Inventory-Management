@@ -1,7 +1,5 @@
 package com.mtlaguerre.inventory_management.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,50 +13,35 @@ import jakarta.persistence.Table;
 @Table(name = "products")           // only needed if your db table is a different name than your class
 public class Product {
 
-    @Id                                                     // tells JPA this is our primary key
-    @Column(name = "prod_id")                               // this is a database column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)     // tells JPA this is an auto-increment field
+    @Id                                                     // tells jpa this is our primary key
+    @Column(name = "products_id")                           // this is a database column        "name = " specifies this corresponds to the "products_id" column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)     // tells jpa this is an auto-increment field
     private long id;
 
-    @Column(name = "prod_rm")                              // specifies that this corresponds to the "prod_num" column
-    private int rm;
+    @ManyToOne
+    @JoinColumn(name = "products_rm")
+    private ProductRm productRm;
 
-    @Column(name = "prod_name")                             // specifies that this corresponds to the "prod_name" column
-    private String name;
+    @Column(name = "products_capacity")
+    private int capacity;
 
-    @Column(name = "prod_desc")                             // specifies that this corresponds to the "prod_desc" column
-    private String description;
-
-    @Column(name = "prod_cap")                              // specifies that this corresponds to the "prod_cap" column
-    private float cap;
-
-    @Column(name = "prod_max_cap")                          // specifies that this corresponds to the "prod_max_cap" column
-    private float maxCap;
-
-    @JoinColumn(name = "wh_id")                             // tells JPA that there is a relationship to this other model
-    @ManyToOne                                              // tells JPA that this is the MANY side of the relationship
-    @JsonIgnore
+    @ManyToOne                                      // tells jpa this is the MANY side of the relationship
+    @JoinColumn(name = "products_wh")               // tells jpa that there is a relationship to this other model
     private Warehouse warehouse;
 
     public Product() {
     }
 
-    public Product(int rm, String name, String description, float cap, float maxCap, Warehouse warehouse) {
-        this.rm = rm;
-        this.name = name;
-        this.description = description;
-        this.cap = cap;
-        this.maxCap = maxCap;
+    public Product(long id, ProductRm productRm, int capacity, Warehouse warehouse) {
+        this.id = id;
+        this.productRm = productRm;
+        this.capacity = capacity;
         this.warehouse = warehouse;
     }
 
-    public Product(long id, int rm, String name, String description, float cap, float maxCap, Warehouse warehouse) {
-        this.id = id;
-        this.rm = rm;
-        this.name = name;
-        this.description = description;
-        this.cap = cap;
-        this.maxCap = maxCap;
+    public Product(ProductRm productRm, int capacity, Warehouse warehouse) {
+        this.productRm = productRm;
+        this.capacity = capacity;
         this.warehouse = warehouse;
     }
 
@@ -70,44 +53,20 @@ public class Product {
         this.id = id;
     }
 
-    public int getRm() {
-        return rm;
+    public ProductRm getRm() {
+        return productRm;
     }
 
-    public void setRm(int rm) {
-        this.rm = rm;
+    public void setRm(ProductRm productRm) {
+        this.productRm = productRm;
     }
 
-    public String getName() {
-        return name;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public float getCap() {
-        return cap;
-    }
-
-    public void setCap(float cap) {
-        this.cap = cap;
-    }
-
-    public float getMaxCap() {
-        return maxCap;
-    }
-
-    public void setMaxCap(float maxCap) {
-        this.maxCap = maxCap;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public Warehouse getWarehouse() {
@@ -123,11 +82,8 @@ public class Product {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (id ^ (id >>> 32));
-        result = prime * result + rm;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + Float.floatToIntBits(cap);
-        result = prime * result + Float.floatToIntBits(maxCap);
+        result = prime * result + ((productRm == null) ? 0 : productRm.hashCode());
+        result = prime * result + capacity;
         result = prime * result + ((warehouse == null) ? 0 : warehouse.hashCode());
         return result;
     }
@@ -143,21 +99,12 @@ public class Product {
         Product other = (Product) obj;
         if (id != other.id)
             return false;
-        if (rm != other.rm)
-            return false;
-        if (name == null) {
-            if (other.name != null)
+        if (productRm == null) {
+            if (other.productRm != null)
                 return false;
-        } else if (!name.equals(other.name))
+        } else if (!productRm.equals(other.productRm))
             return false;
-        if (description == null) {
-            if (other.description != null)
-                return false;
-        } else if (!description.equals(other.description))
-            return false;
-        if (Float.floatToIntBits(cap) != Float.floatToIntBits(other.cap))
-            return false;
-        if (Float.floatToIntBits(maxCap) != Float.floatToIntBits(other.maxCap))
+        if (capacity != other.capacity)
             return false;
         if (warehouse == null) {
             if (other.warehouse != null)
@@ -169,7 +116,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product [id=" + id + ", rm=" + rm + ", name=" + name + ", description=" + description + ", cap=" + cap
-                + ", maxCap=" + maxCap + "]";
+        return "Product [id=" + id + ", rm=" + productRm + ", capacity=" + capacity + ", warehouse=" + warehouse + "]";
     }
+    
 }

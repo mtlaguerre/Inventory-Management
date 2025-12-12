@@ -13,59 +13,75 @@ public class WarehouseService {
 
     private final WarehouseRepository warehouseRepository;
 
+    // constructor injection
     public WarehouseService(WarehouseRepository warehouseRepository) {
         this.warehouseRepository = warehouseRepository;
     }
 
-    public Warehouse createWarehouse(Warehouse warehouse) {
-        // verify maxCap & cap <= 0 && maxCap <= cap
-        return warehouseRepository.save(warehouse);
-    }
-
     public List<Warehouse> findAllWarehouses() {
-
         return warehouseRepository.findAll();
     }
 
-    public Warehouse findById(long id) throws IllegalArgumentException {
+    public Warehouse addWarehouse(Warehouse warehouse) throws IllegalArgumentException {
         
-        Optional<Warehouse> optWarehouse = warehouseRepository.findById(id);
+        // handle missing name
+        if (warehouse.getWarehouseName() == null) {
+            throw new IllegalArgumentException("Warehouse is missing name info.");              // throw exception with custom message
+        }
 
+        // handle entered capacity (should never be predetermined)
+        else if (warehouse.getCapacity() > 0) {
+            throw new IllegalArgumentException("Warehouse capacity cannot be set.");
+        }
+
+        // handle enterd products (should never be predetermined)
+        else if (warehouse.getProducts() != null) {
+            throw new IllegalArgumentException("Products can only be added after Warehouse is created.");
+        }
+
+        else return warehouseRepository.save(warehouse);
+    }
+
+    public Warehouse findWarehouseById(long warehouseId) throws IllegalArgumentException {
+        Optional<Warehouse> optWarehouse = warehouseRepository.findById(warehouseId);   // attempt to find warehouse by id
+
+        // if warehouse found
         if (optWarehouse.isPresent()) {
-            return optWarehouse.get();
-        } else {
-            throw new IllegalArgumentException("Warehouse doesn't exist");
+            return optWarehouse.get();      // return found warehouse
+        }
+        else {
+            throw new IllegalArgumentException("Warehouse not found");      // define custom message with exception
         }
     }
 
-    public Warehouse updateWarehouse(long id, Warehouse warehouse) {
-        
-        Warehouse oldWarehouse = findById(id);
+    public Warehouse updateWarehouse(long warehouseId, Warehouse warehouse) throws IllegalArgumentException {
+
+        // warehouse with soon-to-be-changed values
+        Warehouse oldWarehouse = findWarehouseById(warehouseId);
+
+        // copy current warehouse values
         Warehouse updatedWarehouse = oldWarehouse;
 
-        if (updatedWarehouse != null && !warehouse.getName().equals(updatedWarehouse.getName())) {
-            updatedWarehouse.setName(warehouse.getName());
-        }
-        if (updatedWarehouse != null && !warehouse.getLocation().equals(updatedWarehouse.getLocation())) {
-            updatedWarehouse.setLocation(warehouse.getLocation());
-        }
-        if (updatedWarehouse != null && warehouse.getCap() != updatedWarehouse.getCap()) {
-            updatedWarehouse.setCap(warehouse.getCap());
-        }
-        if (updatedWarehouse != null && warehouse.getMaxCap() != updatedWarehouse.getMaxCap()) {
-            updatedWarehouse.setMaxCap(warehouse.getMaxCap());
-        }
-        if (updatedWarehouse != null && warehouse.getProducts() != updatedWarehouse.getProducts()) {
-            updatedWarehouse.setProducts(warehouse.getProducts());
+        // handle changed name
+        if (warehouse.getWarehouseName() != null && !warehouse.getWarehouseName().equals(oldWarehouse.getWarehouseName())) {
+            updatedWarehouse.setWarehouseName(warehouse.getWarehouseName());    // update name to new value
+        } else {
+            throw new IllegalArgumentException("No changes were found");        // throw exception with custom message
         }
 
-        warehouseRepository.save(updatedWarehouse);
+        // handle entered capacity
+        if (warehouse.getCapacity() > 0) {
+            throw new IllegalArgumentException("Warehouse capacity cannot be set.");
+        }
+
+        updatedWarehouse = warehouseRepository.save(updatedWarehouse);
 
         return updatedWarehouse;
     }
 
-    public void deleteWarehouse(long id) {
-
-        warehouseRepository.deleteById((int)id);
+    public void deleteWarehouse(long warehouseId) {
+        Warehouse warehouse = findWarehouseById(warehouseId);
+        
+        warehouseRepository.delete(warehouse);
     }
 }
