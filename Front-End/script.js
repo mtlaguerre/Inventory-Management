@@ -1,11 +1,15 @@
 productsApiUrl = "http://localhost:8080/products";
 warehousesApiUrl = "http://localhost:8080/warehouses";
 
-let products = [];
-let warehouses = [];
+let products = {
+    name : 'products',      // name of list (for future reference to html id 'total-[name]-col')
+    items : []
+}
 
-let productCount = 0;
-let warehouseCount = 0;
+let warehouses = {
+    name : 'warehouses',    // name of list (for future reference to html id 'total-[name]-col')
+    items : []
+}
 
 // every time the page loads, run this function
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     findTotalWarehouseCount();
     
-});
+})
 
 function findTotalProductCount() {
 
@@ -30,10 +34,14 @@ function findTotalProductCount() {
             let productsJSON = JSON.parse(xhr.responseText);
 
             // loop through each product
-            productsJSON.forEach(product => productCount++);
+            productsJSON.forEach(product => {
+                
+                // add product to list of products
+                products.items.push(product);
+            });
 
             // update total products stat info
-            buildProductsStat(productCount);
+            buildTotalStat(products);
         }
     }
 
@@ -55,10 +63,14 @@ function findTotalWarehouseCount() {
             let warehouseJSON = JSON.parse(xhr.responseText);
 
             // loop through each warehouse
-            warehouseJSON.forEach(warehouse => warehouseCount++);
+            warehouseJSON.forEach(warehouse => {
+
+                // add warehouse to list of warehouses
+                warehouses.items.push(warehouse);
+            });
 
             // update warehouses stat info
-            buildWarehouseStat(warehouseCount);
+            buildTotalStat(warehouses);
         }
     }
 
@@ -68,38 +80,14 @@ function findTotalWarehouseCount() {
     xhr.send();
 }
 
-function buildProductsStat(count) {
+function buildTotalStat(object) {
 
-    let productStat = document.createElement('h2');  // create an <h2> element
+    let stat = document.createElement('h2');  // create an <h2> element
 
-    // prepare productStat
-    productStat.className = 'h2';        // add bootstrap h2 styling
-    productStat.innerText = count;    // add number of products in the inner text field
+    // update fields
+    stat.className = 'h2';        // add bootstrap h2 styling
+    stat.innerText = object.items.length;    // add number of products in the inner text field
 
-    // add productStat to total products card
-    document.getElementById('total-products-col').appendChild(productStat);
+    // add stat to total appropriate card
+    document.getElementById(`total-${object.name}-col`).appendChild(stat);
 }
-
-function buildWarehouseStat(count) {
-
-    let warehouseStat = document.createElement('h2');
-
-    // prepare warehouseStat
-    warehouseStat.className = 'h2';
-    warehouseStat.innerText = count;   // add number of warehouses in the inner text field
-
-    // add warehouseStat to total warehouses card
-    document.getElementById('total-warehouses-col').appendChild(warehouseStat);
-}
-
-// function buildTotalStat(object) {
-
-//     let stat = document.createElement('h2');  // create an <h2> element
-
-//     // update fields
-//     stat.className = 'h2';        // add bootstrap h2 styling
-//     stat.innerText = object.lenth;    // add number of products in the inner text field
-
-//     // add stat to total appropriate card
-//     document.getElementById(`total-${object}-col`).appendChild(stat);
-// }
