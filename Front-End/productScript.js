@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
 });
 
+document.getElementById('delete-button')
 
 
 function addProductToTable(newProduct) {
@@ -44,10 +45,10 @@ function addProductToTable(newProduct) {
     warehouse.innerText = newProduct.warehouse.warehouseName.name;
 
     editBtn.innerHTML = 
-    `<button class="btn btn-success" id="edit-button" onclick="activateEditForm(${newProduct.id})">Edit</button>`
+    `<button class="btn btn-success" id="editButton" onclick="editProduct(${newProduct.id})">Edit</button>`
 
     deleteBtn.innerHTML = 
-    `<button class="btn btn-success" id="delete-button" onclick="activateDeleteForm(${newProduct.id})">Delete</button>`
+    `<button class="btn btn-success" id="deleteButton" onclick="deleteProduct(${newProduct.id})">Delete</button>`
 
     tr.appendChild(rm);
     tr.appendChild(name);
@@ -56,7 +57,47 @@ function addProductToTable(newProduct) {
     tr.appendChild(editBtn);
     tr.appendChild(deleteBtn);
 
+    // set id attribute for <tr>
+    tr.setAttribute('id', 'TR' + newProduct.id);
+
     document.getElementById('products-table-body').appendChild(tr);
 
     allProducts.push(newProduct);
+}
+
+function editProduct(productId) {
+
+}
+
+function deleteProduct(productId) {
+
+    // setup product for deletion
+    let product = {
+        id : productId
+    };
+
+    // send HTTP DELETE request
+    fetch(productsApiUrl + '/id/' + product.id, {
+        method : 'DELETE',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(product)
+    })
+    .then(data => {
+
+        // fetch response (status code, json, etc)
+        if (data.status === 204) {
+            // remove product from table
+            removeProductFromTable(product);
+        }
+    })
+    .catch(error => console.error(error));
+}
+
+function removeProductFromTable(product) {
+
+    // find specific <tr> by the id that equals product id
+    const element = document.getElementById('TR' + product.id);
+    element.remove();   // remove the element
 }
