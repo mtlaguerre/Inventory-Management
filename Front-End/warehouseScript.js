@@ -35,11 +35,20 @@ function addWarehouseComponent(newWarehouse) {
     let bar = document.createElement('div');
     let maxCap = document.createElement('div');
 
-    div.className = 'col-6 border';
+    // stylize and dynamically grab card data
+    div.className = 'col-5 border rounded mx-auto p-4';
     row.className = 'row';
     title.innerText = newWarehouse.warehouseName.name;
-    bar.innerText = '[BAR HERE]';
+
+    // progress bar container
+    bar.className = 'progress';
+    bar.role = 'progressbar';
+
+    // fill container based on current warehouse capacity and max capacity
+    bar.innerHTML = `<div class='progress-bar bg-info' style='width:${newWarehouse.capacity / newWarehouse.warehouseName.warehouseLocation.maxCapacity}%'">${Math.floor(newWarehouse.capacity / newWarehouse.warehouseName.warehouseLocation.maxCapacity)}%</div>`
     maxCap.innerText = newWarehouse.warehouseName.warehouseLocation.maxCapacity;
+
+    // max capacity number at bottom-right of card
     maxCap.className = 'text-end';
 
     // build row
