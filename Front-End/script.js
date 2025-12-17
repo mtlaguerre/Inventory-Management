@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     findTotalCount(products);
 
     findTotalCount(warehouses);
-    
+
 })
 
-function findTotalCount(object) {
+function findTotalCount(object, callback) {
 
     let xhr = new XMLHttpRequest();
 
@@ -40,7 +40,10 @@ function findTotalCount(object) {
             });
 
             // update total stat of current object
-            buildTotalStat(object);
+            buildStat(object);
+
+            // proper scheduling for updated warehouse array
+            if (object.name === 'warehouses') findUtilization(object.items);
         }
     }
 
@@ -51,14 +54,40 @@ function findTotalCount(object) {
     xhr.send();
 }
 
-function buildTotalStat(object) {
+function buildStat(object) {
 
     let stat = document.createElement('h2');  // create an <h2> element
 
     // update fields
-    stat.className = 'h2';        // add bootstrap h2 styling
-    stat.innerText = object.items.length;    // add number of products in the inner text field
+    stat.className = 'h2';                  // add bootstrap h2 styling
+
+    // populate stat fields accordingly
+    stat.innerText = object.name == 'products' || object.name == 'warehouses' ? object.items.length :
+    object.name == 'utilization' ? object.stat + '%' : object.stat;
 
     // add stat to total appropriate card
     document.getElementById(`total-${object.name}-col`).appendChild(stat);
+}
+
+function findUtilization(warehouseList) {
+
+    // loop through each warehouse and find total sum
+    let sum = 0;
+    let max = 0;
+    
+    warehouseList.forEach(warehouse => {
+
+        sum += warehouse.capacity;      // add warehouse capacity to sum
+        
+        max += warehouse.warehouseName.warehouseLocation.maxCapacity;       // add warehouse capacity to max
+    });
+
+    // create object to build stat (to reuse buildStat())
+    let util = {
+        name : 'utilization',
+        stat : (sum / max).toFixed(4) * 100     // convert from unformatted decimal to 2 digit decimal percentage
+    };
+
+    // update total utilization stat
+    buildStat(util);
 }
