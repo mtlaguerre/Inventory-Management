@@ -1,26 +1,25 @@
-productsApiUrl = "http://localhost:8080/products";
-warehousesApiUrl = "http://localhost:8080/warehouses";
+inventoryApiUrl = "http://localhost:8080/";
 
 let products = {
-    name : 'products',      // name of list (for future reference to html id 'total-[name]-col')
+    name : 'products',      // name of list (for finding endpoints and for html id 'total-[name]-col')
     items : []
 }
 
 let warehouses = {
-    name : 'warehouses',    // name of list (for future reference to html id 'total-[name]-col')
+    name : 'warehouses',    // name of list (for finding endpoints and for html id 'total-[name]-col')
     items : []
 }
 
 // every time the page loads, run this function
 document.addEventListener('DOMContentLoaded', () => {
 
-    findTotalProductCount();
+    findTotalCount(products);
 
-    findTotalWarehouseCount();
+    findTotalCount(warehouses);
     
 })
 
-function findTotalProductCount() {
+function findTotalCount(object) {
 
     let xhr = new XMLHttpRequest();
 
@@ -31,52 +30,24 @@ function findTotalProductCount() {
         if (xhr.readyState === 4) {
 
             // store request response
-            let productsJSON = JSON.parse(xhr.responseText);
+            let responseJSON = JSON.parse(xhr.responseText);
 
-            // loop through each product
-            productsJSON.forEach(product => {
-                
-                // add product to list of products
-                products.items.push(product);
+            // loop through each item
+            responseJSON.forEach(item => {
+
+                // add item to current object's list
+                object.items.push(item);
             });
 
-            // update total products stat info
-            buildTotalStat(products);
+            // update total stat of current object
+            buildTotalStat(object);
         }
     }
 
-    // make the HTTP GET request to the find all products endpoint
-    xhr.open('GET', productsApiUrl);
+    // make the HTTP GET request to the find all [object] endpoint (products, warehouses, etc.)
+    xhr.open('GET', inventoryApiUrl + object.name);
 
     // send the request
-    xhr.send();
-}
-
-function findTotalWarehouseCount() {
-
-    let xhr = new XMLHttpRequest();
-
-    xhr.onreadystatechange = () => {
-
-        if (xhr.readyState === 4) {
-
-            let warehouseJSON = JSON.parse(xhr.responseText);
-
-            // loop through each warehouse
-            warehouseJSON.forEach(warehouse => {
-
-                // add warehouse to list of warehouses
-                warehouses.items.push(warehouse);
-            });
-
-            // update warehouses stat info
-            buildTotalStat(warehouses);
-        }
-    }
-
-    // make the HTTP GET request to the find all warehouses endpoint
-    xhr.open('GET', warehousesApiUrl);
-
     xhr.send();
 }
 
