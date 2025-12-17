@@ -85,7 +85,7 @@ function findUtilization(warehouseList) {
     // create object to build stat (to reuse buildStat())
     let util = {
         name : 'utilization',
-        stat : (sum / max).toFixed(4) * 100     // convert from unformatted decimal to 2 digit decimal percentage
+        stat : ((sum / max) * 100).toFixed(2)     // convert from unformatted decimal to 2 digit decimal percentage
     };
 
     // update total utilization stat

@@ -45,11 +45,11 @@ function addWarehouseComponent(newWarehouse) {
     bar.role = 'progressbar';
 
     // fill container based on current warehouse capacity and max capacity
-    bar.innerHTML = `<div class='progress-bar bg-info' style='width:${newWarehouse.capacity / newWarehouse.warehouseName.warehouseLocation.maxCapacity}%'">${Math.floor(newWarehouse.capacity / newWarehouse.warehouseName.warehouseLocation.maxCapacity)}%</div>`
-    maxCap.innerText = newWarehouse.warehouseName.warehouseLocation.maxCapacity;
+    let percentage = (newWarehouse.capacity / newWarehouse.warehouseName.warehouseLocation.maxCapacity) * 100
+    bar.innerHTML = `<div class='progress-bar bg-info' style='width:${percentage}%'">${Math.floor(percentage)}%</div>`
 
-    // max capacity number at bottom-right of card
-    maxCap.className = 'text-end';
+    maxCap.innerText = newWarehouse.warehouseName.warehouseLocation.maxCapacity;
+    maxCap.className = 'text-end';      // position max cap at bottom-right of stat card
 
     // build row
     row.appendChild(title);
