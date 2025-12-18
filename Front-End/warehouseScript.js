@@ -79,6 +79,7 @@ function addWarehouseCard(newWarehouse) {
     let title = document.createElement('h2');
     let bar = document.createElement('div');
     let maxCap = document.createElement('div');
+    let deleteBtn = document.createElement('div');
 
     // stylize and dynamically grab card data
     div.className = 'col-5 border rounded mx-auto p-4';
@@ -96,10 +97,14 @@ function addWarehouseCard(newWarehouse) {
     maxCap.innerText = newWarehouse.warehouseName.warehouseLocation.maxCapacity;
     maxCap.className = 'text-end';      // position max cap at bottom-right of stat card
 
+    deleteBtn.innerHTML =
+    `<button class="btn btn-danger" id="deleteBtn${newWarehouse.id}" onclick="deleteWarehouse(${newWarehouse.id})">DELETE</button>`
+
     // build row
     row.appendChild(title);
     row.appendChild(bar);
     row.appendChild(maxCap);
+    row.appendChild(deleteBtn);
 
     // set row within parent div
     div.appendChild(row);
@@ -196,4 +201,52 @@ async function addWarehouse(newWarehouse) {
     }
 
     addWarehouseCard(newWarehouse);
+}
+
+async function deleteWarehouse(warehouseId) {
+
+    let warehouseNameId;
+
+    // loop through warehouses to find current selection
+    allWarehouses.forEach(warehouse => {
+        if (warehouse.id == warehouseId) {
+
+            warehouseNameId = warehouse.warehouseName.id;
+        }
+    })
+    
+    let response = await fetch(warehousesApiUrl + '/id/' + warehouseId, {
+        method : 'DELETE',
+        headers : {
+            'Content-Type' : 'application/json'
+        }
+    });
+
+    if (response.status === 204) {
+        deleteWarehouseName(warehouseId, warehouseNameId);
+    }
+}
+
+async function deleteWarehouseName(warehouseId, warehouseNameId) {
+
+    let warehouseLocationId;
+
+    // loop through warehouses to find current selection
+    allWarehouses.forEach(warehouse => {
+        if (warehouse.id == warehouseId) {
+
+            warehouseLocationId = warehouse.warehouseName.WarehouseLocation.id;
+        }
+    })
+
+    let response = await fetch(warehousesApiUrl + '/names/id/' + warehouseNameId, {
+        method : 'DELETE',
+        header : {
+            'Content-Type' : 'application/json'
+        }
+    });
+
+    if (response.status === 204) {
+        deleteWarehouseLocation(warehouseId, warehouseLocationId)
+    }
 }
