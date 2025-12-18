@@ -1,9 +1,14 @@
 package com.mtlaguerre.inventory_management.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mtlaguerre.inventory_management.models.WarehouseLocation;
 import com.mtlaguerre.inventory_management.services.WarehouseLocationService;
 
 @RestController
@@ -15,6 +20,20 @@ public class WarehouseLocationController {
 
     public WarehouseLocationController(WarehouseLocationService warehouseLocationService) {
         this.warehouseLocationService = warehouseLocationService;
+    }
+
+    // POST /warehouses/locations
+    @PostMapping
+    public ResponseEntity<WarehouseLocation> createWarehouseLocation(@RequestBody WarehouseLocation warehouseLocation) {
+
+        try {
+            WarehouseLocation newLocation = warehouseLocationService.createWarehouseLocation(warehouseLocation);
+            return new ResponseEntity<>(newLocation, HttpStatus.CREATED);        // return 201 if successfully added product
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();   // return 400 if invalid request and display custom message
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // otherwise, return 500 and display message
+        }
     }
 
 }
