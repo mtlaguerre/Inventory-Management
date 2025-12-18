@@ -1,6 +1,8 @@
 productsApiUrl = "http://localhost:8080/products";
 let allProducts = [];
 
+let showingAddProductForm = false;
+
 document.addEventListener('DOMContentLoaded', () => {
 
     let xhr = new XMLHttpRequest();
@@ -44,7 +46,9 @@ document.getElementById('new-product-form').addEventListener('submit', (event) =
 
     addProduct(newProduct);
 
-})
+    resetAndClearAddProductForm();
+
+});
 
 function addProductToTable(newProduct) {
 
@@ -148,11 +152,34 @@ async function addProduct(newProduct) {
     }
 }
 
-function toggleAddForm() {
+function toggleAddProductForm() {
 
-    // show form and save button, hide add product button
-    const formContainer = document.getElementById('new-product-form-container');
-    const addProductBtn = document.getElementById('add-product-button');
-    formContainer.setAttribute('class', 'container');
-    addProductBtn.setAttribute('class', 'd-none');
+    const formContainer = document.getElementById('new-product-form-container');        // add product form container
+    const addProductBtn = document.getElementById('add-product-button');                // add product button
+
+    if (!showingAddProductForm) {
+        // show form and save button, hide add product button
+        formContainer.setAttribute('class', 'container');
+        addProductBtn.setAttribute('class', 'd-none');
+
+        // update bool
+        showingAddProductForm = !showingAddProductForm;
+    }
+    else {
+        // hide form and save button, show add product button
+        formContainer.setAttribute('class', 'd-none');
+        addProductBtn.setAttribute('class', 'btn btn-success');
+
+        // update bool
+        showingAddProductForm = !showingAddProductForm;
+    }
+}
+
+function resetAndClearAddProductForm() {
+
+    // reset form
+    const form = document.getElementById('new-product-form').reset();
+
+    // hide form
+    toggleAddProductForm();
 }
