@@ -34,7 +34,7 @@ public class WarehouseService {
             throw new IllegalArgumentException("Warehouse capacity cannot be set.");
         }
 
-        // handle enterd products (should never be predetermined)
+        // handle entered products (should never be predetermined)
         else if (warehouse.getProducts() != null) {
             throw new IllegalArgumentException("Products can only be added after Warehouse is created.");
         }
