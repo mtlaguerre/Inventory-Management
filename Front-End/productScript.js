@@ -38,7 +38,7 @@ document.getElementById('new-product-form').addEventListener('submit', (event) =
         },
         capacity : inputData.get('new-product-capacity'),
         warehouse : {
-            id : 2
+            id : inputData.get('new-product-warehouse-id')
         }
     };
 
