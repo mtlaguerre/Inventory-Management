@@ -77,7 +77,9 @@ public class WarehouseController {
         try {
             warehouseService.deleteWarehouse(warehouseId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);                                     // return 204 if successfully deleted warehouse
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        }catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();  // otherwise return 500
         }
     }

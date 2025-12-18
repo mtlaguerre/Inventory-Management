@@ -205,13 +205,13 @@ async function addWarehouse(newWarehouse) {
 
 async function deleteWarehouse(warehouseId) {
 
-    let warehouseNameId;
+    let foundWarehouse;
 
     // loop through warehouses to find current selection
     allWarehouses.forEach(warehouse => {
         if (warehouse.id == warehouseId) {
 
-            warehouseNameId = warehouse.warehouseName.id;
+            foundWarehouse = warehouse;
         }
     })
     
@@ -223,30 +223,38 @@ async function deleteWarehouse(warehouseId) {
     });
 
     if (response.status === 204) {
-        deleteWarehouseName(warehouseId, warehouseNameId);
+        deleteWarehouseName(foundWarehouse);
     }
 }
 
-async function deleteWarehouseName(warehouseId, warehouseNameId) {
+async function deleteWarehouseName(warehouse) {
 
-    let warehouseLocationId;
-
-    // loop through warehouses to find current selection
-    allWarehouses.forEach(warehouse => {
-        if (warehouse.id == warehouseId) {
-
-            warehouseLocationId = warehouse.warehouseName.WarehouseLocation.id;
-        }
-    })
-
-    let response = await fetch(warehousesApiUrl + '/names/id/' + warehouseNameId, {
+    let response = await fetch(warehousesApiUrl + '/names/id/' + warehouse.warehouseName.id, {
         method : 'DELETE',
-        header : {
+        headers : {
             'Content-Type' : 'application/json'
         }
     });
 
     if (response.status === 204) {
-        deleteWarehouseLocation(warehouseId, warehouseLocationId)
+        deleteWarehouseLocation(warehouse);
     }
+}
+
+async function deleteWarehouseLocation(warehouse) {
+    
+    let response = await fetch(warehousesApiUrl + '/locations/id/' + warehouse.warehouseName.warehouseLocation.id, {
+        method : 'DELETE',
+        headers : {
+            'Content-Type' : 'application/json'
+        }
+    });
+
+    if (response.status === 204) {
+        removeWarehouseCard(warehouse);
+    }
+}
+
+function removeWarehouseCard(warehouse) {
+    console.log('Removing: ', warehouse);
 }
