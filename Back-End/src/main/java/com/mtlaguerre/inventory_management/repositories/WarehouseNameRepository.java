@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.mtlaguerre.inventory_management.models.WarehouseName;
 
 @Repository
-public interface WarehouseNameRepository extends JpaRepository<WarehouseName, Integer>{
+public interface WarehouseNameRepository extends JpaRepository<WarehouseName, Long>{
 
 }

@@ -3,6 +3,8 @@ package com.mtlaguerre.inventory_management.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,19 @@ public class WarehouseNameController {
         try {
             WarehouseName newName = warehouseNameService.createWarehouseName(warehouseName);
             return new ResponseEntity<>(newName, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
+        }
+    }
+
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<WarehouseName> deleteWarehouseName(@PathVariable("id") long warehouseNameId) {
+        
+        try {
+            warehouseNameService.deleteWarehouseNameById(warehouseNameId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
