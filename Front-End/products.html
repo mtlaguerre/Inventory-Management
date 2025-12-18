@@ -63,6 +63,38 @@
 					</thead>
 					<tbody id="products-table-body">
 					</tbody>
+
+					<section class="container d-none" id="new-product-form-container">
+						<!-- NEW PRODUCT FORM -->
+						<form id="new-product-form" action="#">		<!-- action="#" prevents page redirection on submission -->
+
+							<!-- RM field -->
+							<div class="form-group">
+								<label>RM</label>
+								<input id="new-product-rm" name="new-product-rm" type="number" class="form-control" />
+							</div>
+
+							<!-- Capacity field -->
+							<div class="form-group">
+								<label>Capacity</label>
+								<input id="new-product-capacity" name="new-product-capacity" type="number" class="form-control" />
+							</div>
+
+							<!-- Warehouse field -->
+							<div class="form-group">
+								<label>Warehouse</label>
+								<input id="new-product-warehouse-id" name="new-product-warehouse-id" type="text" class="form-control" value="2" disabled />
+							</div>
+
+							<!-- Save button -->
+							<div class="form-group">
+								<input id="save-button" name="save-button" type="submit" value="Save" class="btn btn-success" />
+							</div>
+
+						</form>
+					</section>
+
+					<button class="btn btn-success" id="add-product-button" onclick="toggleAddForm()">Add Product</button>
 				</table>
 			</div>
 

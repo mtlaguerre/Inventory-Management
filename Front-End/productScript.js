@@ -25,8 +25,26 @@ document.addEventListener('DOMContentLoaded', () => {
     
 });
 
-document.getElementById('delete-button')
+document.getElementById('new-product-form').addEventListener('submit', (event) => {
 
+    // event stores info by default
+    event.preventDefault();     // preventDefault() prevents form from refreshing page
+
+    let inputData = new FormData(document.getElementById('new-product-form'));
+
+    let newProduct = {
+        rm : {
+            rm : inputData.get('new-product-rm')
+        },
+        capacity : inputData.get('new-product-capacity'),
+        warehouse : {
+            id : 2
+        }
+    };
+
+    addProduct(newProduct);
+
+})
 
 function addProductToTable(newProduct) {
 
@@ -39,16 +57,23 @@ function addProductToTable(newProduct) {
     let editBtn = document.createElement('td');
     let deleteBtn = document.createElement('td');
 
+    rm.setAttribute('id', 'product-' + newProduct.id + '-rm');
     rm.innerText = newProduct.rm.rm;
+
+    name.setAttribute('id', 'product-' + newProduct.id + '-name')
     name.innerText = newProduct.rm.name;
+
+    capacity.setAttribute('id', 'product-' + newProduct.id + '-capacity')
     capacity.innerText = newProduct.capacity + '/' + newProduct.rm.maxCapacity;
+
+    warehouse.setAttribute('id', 'product-' + newProduct.id + '-warehouse')
     warehouse.innerText = newProduct.warehouse.warehouseName.name;
 
     editBtn.innerHTML = 
-    `<button class="btn btn-success" id="editButton" onclick="editProduct(${newProduct.id})">Edit</button>`
+    `<button class="btn btn-success" id="editButton${newProduct.id}" onclick="editProduct(${newProduct.id})">Edit</button>`;
 
     deleteBtn.innerHTML = 
-    `<button class="btn btn-success" id="deleteButton" onclick="deleteProduct(${newProduct.id})">Delete</button>`
+    `<button class="btn btn-success" id="deleteButton${newProduct.id}" onclick="deleteProduct(${newProduct.id})">Delete</button>`;
 
     tr.appendChild(rm);
     tr.appendChild(name);
@@ -63,10 +88,6 @@ function addProductToTable(newProduct) {
     document.getElementById('products-table-body').appendChild(tr);
 
     allProducts.push(newProduct);
-}
-
-function editProduct(productId) {
-
 }
 
 function deleteProduct(productId) {
@@ -100,4 +121,38 @@ function removeProductFromTable(product) {
     // find specific <tr> by the id that equals product id
     const element = document.getElementById('TR' + product.id);
     element.remove();   // remove the element
+}
+
+async function addProduct(newProduct) {
+
+    // send HTTP POST request
+    let response = await fetch(productsApiUrl, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(newProduct)
+    });
+
+
+    if (!response.status === 201) {
+        throw new Error(`HTTP error ${response.status}`);
+    }
+    
+    // only parse JSON if there *is* a body
+    const text = await response.text();
+    if (text) {
+        let productJson = JSON.parse(text);
+        console.log('PRODUCT JSON', productJson);
+        addProductToTable(productJson);
+    }
+}
+
+function toggleAddForm() {
+
+    // show form and save button, hide add product button
+    const formContainer = document.getElementById('new-product-form-container');
+    const addProductBtn = document.getElementById('add-product-button');
+    formContainer.setAttribute('class', 'container');
+    addProductBtn.setAttribute('class', 'd-none');
 }
