@@ -59,12 +59,18 @@
 
 				<section class="container d-none" id="new-warehouse-form-container">
 						<!-- NEW Warehouse FORM -->
-						<form id="new-Warehouse-form" action="#">		<!-- action="#" prevents page redirection on submission -->
+						<form id="new-warehouse-form" action="#">		<!-- action="#" prevents page redirection on submission -->
 
 							<!-- Warehouse Name field -->
 							<div class="form-group">
-								<label>Warehouse Name</label>
+								<label>Name</label>
 								<input id="new-warehouse-name" name="new-warehouse-name" type="text" class="form-control" />
+							</div>
+
+							<!-- Warehouse Location field -->
+							<div class="form-group">
+								<label>Location</label>
+								<input id="new-warehouse-location" name="new-warehouse-location" type="text" class="form-control" />
 							</div>
 
 							<!-- Max Capacity field -->
@@ -73,15 +79,15 @@
 								<input id="new-warehouse-max-capacity" name="new-warehouse-max-capacity" type="number" class="form-control" />
 							</div>
 
-							<!-- Save button -->
+							<!-- Add button -->
 							<div class="form-group">
-								<input id="save-button" name="save-button" type="submit" value="Save" class="btn btn-success" />
+								<input id="add-button" name="add-button" type="submit" value="Add" class="btn btn-info text-light" />
 							</div>
 
 						</form>
 					</section>
 
-					<button class="btn btn-success" id="add-warehouse-button" onclick="toggleAddWarehouseForm()">Add Warehouse</button>
+					<button class="btn btn-info text-light" id="add-warehouse-button" onclick="toggleAddWarehouseForm()">Add Warehouse</button>
 			</div>
 
 		</section>

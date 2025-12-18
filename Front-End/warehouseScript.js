@@ -1,6 +1,8 @@
 warehousesApiUrl = "http://localhost:8080/warehouses";
 let allWarehouses = [];
 
+let showingAddWarehouseForm = false;
+
 document.addEventListener('DOMContentLoaded', () => {
 
     let xhr = new XMLHttpRequest();
@@ -24,6 +26,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
     xhr.send();
 
+});
+
+document.getElementById('new-warehouse-form').addEventListener('submit', async (event) => {
+
+    // prevent refreshes on submit
+    event.preventDefault();
+
+    let inputData = new FormData(document.getElementById('new-warehouse-form'));
+
+    // add location
+    let newWarehouseLocation = {
+        location : inputData.get('new-warehouse-location'),
+        maxCapacity : inputData.get('new-warehouse-max-capacity')
+    };
+
+    let locationId =  await createWarehouseLocation(newWarehouseLocation);
+    console.log('locationId: ', locationId);
+
+    // add name
+    let newWarehouseName = {
+        name : inputData.get('new-warehouse-name'),
+        warehouseLocation : {
+            id : locationId
+        }
+    };
+
+    let warehouseNameId = await createWarehouseName(newWarehouseName);
+
+    // add warehouse
+    let newWarehouse = {
+        warehouseName : {
+            id : warehouseNameId
+        },
+        capacity : 0
+    };
+
+    await addWarehouse(newWarehouse);
+
+    // reset and clear add new warehouse form
+    event.targe.reset();
+
+    // hide form
+    toggleAddWarehouseForm();
 });
 
 function addWarehouseCard(newWarehouse) {
@@ -62,4 +107,93 @@ function addWarehouseCard(newWarehouse) {
     document.getElementById('warehouse-cards').appendChild(div);
 
     allWarehouses.push(newWarehouse);
+}
+
+function toggleAddWarehouseForm() {
+
+    const newWarehouseFormContainer = document.getElementById('new-warehouse-form-container');
+    const addWarehouseBtn = document.getElementById('add-warehouse-button');
+
+    if (!showingAddWarehouseForm) {
+
+        // show warehouse form
+        newWarehouseFormContainer.setAttribute('class', 'container');
+
+        // hide button
+        addWarehouseBtn.setAttribute('class', 'd-none');
+    }
+    else {
+        
+        // hide warehouse form
+        newWarehouseFormContainer.setAttribute('class', 'd-none');
+
+        // show button
+        addWarehouseBtn.setAttribute('class', 'btn btn-info text-light');
+    }
+}
+
+async function createWarehouseLocation(newWarehouseLocation) {
+
+    console.log(newWarehouseLocation);      // debug
+
+    // send HTTP POST request
+    let response = await fetch(warehousesApiUrl + '/locations', {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(newWarehouseLocation)
+    });
+
+    // only parse JSON if there *is* a body
+    const text = await response.text();
+    if (text) {
+        let warehouseLocationJson = JSON.parse(text);
+        newWarehouseLocation.id = warehouseLocationJson.id;
+    }
+    
+    console.log('returned location: ' + newWarehouseLocation)
+    return newWarehouseLocation.id;
+}
+
+async function createWarehouseName(newWarehouseName) {
+
+    console.log(newWarehouseName)       // debug
+
+    let response = await fetch(warehousesApiUrl + '/names', {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(newWarehouseName)
+    });
+
+    const text = await response.text();
+    if (text) {
+        let warehouseNameJson = JSON.parse(text);
+        newWarehouseName.id = warehouseNameJson.id;
+    }
+
+    return newWarehouseName.id;
+}
+
+async function addWarehouse(newWarehouse) {
+
+    console.log(newWarehouse)       // debug
+
+    let response = await fetch(warehousesApiUrl, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(newWarehouse)
+    });
+
+    const text = await response.text();
+    if (text) {
+        let newWarehouseJson = JSON.parse(text);
+        newWarehouse.id = newWarehouseJson.id;
+    }
+
+    addWarehouseCard(newWarehouse);
 }

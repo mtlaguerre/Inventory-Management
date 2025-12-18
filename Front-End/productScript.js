@@ -140,7 +140,7 @@ async function addProduct(newProduct) {
 
 
     if (!response.status === 201) {
-        throw new Error(`HTTP error ${response.status}`);
+        throw new Error(`Product creation failed ${response.status}`);
     }
     
     // only parse JSON if there *is* a body
