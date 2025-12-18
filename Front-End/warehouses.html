@@ -54,7 +54,34 @@
 					<div class="row" id="warehouse-cards">
 						<!-- dynamically populate cards -->
 					</div>
+					
 				</div>
+
+				<section class="container d-none" id="new-warehouse-form-container">
+						<!-- NEW Warehouse FORM -->
+						<form id="new-Warehouse-form" action="#">		<!-- action="#" prevents page redirection on submission -->
+
+							<!-- Warehouse Name field -->
+							<div class="form-group">
+								<label>Warehouse Name</label>
+								<input id="new-warehouse-name" name="new-warehouse-name" type="text" class="form-control" />
+							</div>
+
+							<!-- Max Capacity field -->
+							<div class="form-group">
+								<label>Max Capacity</label>
+								<input id="new-warehouse-max-capacity" name="new-warehouse-max-capacity" type="number" class="form-control" />
+							</div>
+
+							<!-- Save button -->
+							<div class="form-group">
+								<input id="save-button" name="save-button" type="submit" value="Save" class="btn btn-success" />
+							</div>
+
+						</form>
+					</section>
+
+					<button class="btn btn-success" id="add-warehouse-button" onclick="toggleAddWarehouseForm()">Add Warehouse</button>
 			</div>
 
 		</section>

@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // add warehouses to table
             warehouses.forEach(newWarehouse => {
-                addWarehouseComponent(newWarehouse);
+                addWarehouseCard(newWarehouse);
             });
             
         }
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-function addWarehouseComponent(newWarehouse) {
+function addWarehouseCard(newWarehouse) {
 
     // create warehouse cards
     let div = document.createElement('div');
